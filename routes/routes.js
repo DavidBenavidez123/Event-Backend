@@ -21,7 +21,7 @@ module.exports = server => {
   server.post('/api/register', register);
   server.post('/makePurchase', makePurchase);
   server.post('/viewPurchase', viewPurchases);
-  server.get('/getUserData', getUserData);
+  server.get('/getUserData', authorizationMiddleware, getUserData);
 };
 
 function viewServer(req, res) {
@@ -213,7 +213,8 @@ function login(req, res) {
       res.status(500).json({ err });
     });
 }
-function getUserData(req, res) {
+
+function authorizationMiddleware(req, res, next) {
   const token = req.headers.authorization;
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
@@ -224,11 +225,16 @@ function getUserData(req, res) {
         // token is valid
         req.decodedToken = decodedToken; // any sub-sequent middleware of route handler have access to this
         console.log('\n** decoded token information **\n', req.decodedToken);
+        next()
       }
     });
   } else {
     res.status(401).json({ message: 'no token provided' });
+    res.redirect('/')
   }
+}
+
+function getUserData(req, res) {
   db('users')
     .where('users.users_id', req.decodedToken.users_id)
     .then(users => {
@@ -236,3 +242,5 @@ function getUserData(req, res) {
     })
     .catch(err => res.send(err));
 }
+
+

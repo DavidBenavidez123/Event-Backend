@@ -1,4 +1,4 @@
-exports.up = function(knex, Promise) {
+exports.up = function (knex, Promise) {
   return knex.schema.createTable('event', table => {
     table.increments('event_id'); //primary key
     table
@@ -15,8 +15,8 @@ exports.up = function(knex, Promise) {
     table.string('start_time', 1024); // primary date field
     table.string('end_time', 1024); // primary date field
     table.string('event_location', 1024); // primary date field
-	table.string('organizer_name', 1024); // primary date field
-	table.integer('price', 1024); // primary date field
+    table.string('organizer_name', 1024); // primary date field
+    table.integer('price', 1024); // primary date field
     table
       .timestamp('last_updated') // time last updated
       .notNullable()
@@ -24,6 +24,6 @@ exports.up = function(knex, Promise) {
   });
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function (knex, Promise) {
   return knex.schema.dropTableIfExists('event');
 };

@@ -13,8 +13,6 @@ module.exports = {
         tableName: 'dbmigrations',
       },
     },
-  
-    
-  
+   
   };
   
